@@ -1,0 +1,12 @@
+aiohttp
+asyncio
+boto3
+pandas
+pyarrow
+websockets
+ujson
+sortedcontainers
+matplotlib
+numpy
+plotly
+ipython
