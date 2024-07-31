@@ -105,7 +105,11 @@ The `/examples` folder contains reference files to help you get started:
 To run the examples:
 
 ```bash
-python examples/example_usage.py
+# for real time orderbook updates with  1second frequency( high I/O operations )
+python scrape_realtime.py
+
+# for updates each 60 seconds with 1second frequency
+python scrape.py
 ```
 
 ## 📈 Data Format
