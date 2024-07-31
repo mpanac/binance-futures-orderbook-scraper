@@ -28,6 +28,8 @@ A powerful tool for scraping and analyzing orderbook data from Binance Futures, 
 - Save orderbook data in Parquet format:
   - Every 60 seconds (`scrape_orderbook.py`)
   - Every 1 second for near real-time updates (`realtime_orderbook.py`)
+  - RestAPI snapshot taken every 30 seconds to capture maximum possible depth of 1000 levels. (is_snapshot = True)
+  - Websocket stream received every 1second updating the local orderbook. (is_snapshot = False)
 - Real-time orderbook updates with immediate data availability
 - Real-time plotting of orderbook data
 - Capable or running 24/7 on VPS with low CPU and Memory usage (tested)
@@ -54,7 +56,7 @@ pip install -r requirements.txt
 
 ### Scraping Orderbook Data
 
-To scrape orderbook data (60-second intervals):
+To scrape orderbook data (appended to .parquet file every 60-seconds):
 
 ```python
 import asyncio
@@ -69,7 +71,7 @@ if __name__ == "__main__":
 
 ### Real-time Orderbook Data
 
-To collect real-time orderbook data (1-second intervals):
+To collect real-time orderbook data (appended to .parquet file every 1-second):
 
 ```python
 import asyncio
@@ -89,7 +91,7 @@ Data is saved to `orderbook_data/SYMBOL_YYYY-MM-DD.parquet`.
 For real-time visualization:
 
 1. Open `src/realtime_plot.ipynb`
-2. Adjust the interval and symbol as needed
+2. Adjust the interval (e.g. 10s, 1min, 30min, etc ... ) and symbol (BTCUSDT, ETHUSDT, BNBUSDT, SOLUSDT) as needed
 3. Ensure the correct .parquet file path is specified
 4. Run the notebook
 
