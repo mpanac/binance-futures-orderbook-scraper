@@ -25,12 +25,18 @@
 - [☁️ Cloudflare R2 Storage](#️-cloudflare-r2-storage)
 - [🖥️ VPS Deployment](#️-vps-deployment)
 - [📄 License](#-license)
-- [📞 Contact](#-contact)
-- [🙏 Acknowledgements](#-acknowledgements)
+- [☕ Support the Project](#-support-the-project)
 
 ## 🌟 About the Project
 
 The Binance Futures Orderbook Scraper is a high-performance Python script designed to collect and process real-time orderbook data from Binance Futures markets. It uses WebSocket connections to stream live data, processes it efficiently, and stores it in Parquet format for further analysis.
+
+Key features of the data collection process:
+
+- Utilizes REST API snapshots every 30 seconds for orderbook consistency.
+- Collects 1000 most granular orderbook levels, aggregated into 100 levels.
+- Receives WebSocket updates every 500ms, also aggregated into 100 levels.
+
 
 This script is ideal for researchers, traders, and data scientists who need access to high-quality, real-time market data from Binance Futures.
 
@@ -39,13 +45,14 @@ This script is ideal for researchers, traders, and data scientists who need acce
 - Real-time orderbook data collection for multiple symbols
 - Efficient data processing using multithreading and asyncio
 - Data aggregation and VWAP calculation
-- Periodic snapshots of the full orderbook
+- Periodic snapshots of the full orderbook (every 30 seconds)
 - Automatic reconnection and error handling
 - Data storage in Parquet format for efficient querying and analysis
 - Data appended to Parquet files every 1 minute inside of /orderbook_data folder
 - Automatic uploading of data to Cloudflare R2 storage
 - Configurable symbol list for data collection
 - Continuous data collection with restart capability
+
 
 ## 🚀 Getting Started
 
@@ -130,6 +137,12 @@ The collected data is stored in Parquet files with the following schema:
 - `oi`: Open interest (string) - every 30s
 - `fr`: Funding rate (string) - every 30s
 
+**Important Notes:**
+1. **Data Parsing:** Due to the structure of the files and their format, the data needs to be parsed before it can be used for analysis. The JSON-encoded fields (`b`, `a`, `liq`) need to be decoded, and other fields may need to be converted to appropriate data types.
+2. **Compression:** The Parquet files are stored using compression to reduce storage requirements and improve I/O performance. Ensure you use appropriate libraries (e.g., pyarrow) that can handle compressed Parquet files when working with the data.
+3. **Orderbook Levels:** The orderbook data contains 100 aggregated levels, derived from the 1000 most granular levels obtained from the REST API snapshots and WebSocket updates.
+
+
 ## 📈 VWAP Calculation
 
 The Volume Weighted Average Price (VWAP) is calculated separately for spot and futures markets. The calculation is performed over a 30-second window and updated with each snapshot. Here's how it's done:
@@ -152,6 +165,7 @@ The script is designed to handle interruptions gracefully. In case of disconnect
 
 - The script will find existing Parquet files and continue appending data without overwriting already scraped information.
 - This ensures data continuity and prevents data loss during unexpected interruptions.
+- Compressed Parquet format is used for efficient storage and faster read/write operations.
 
 ## ☁️ Cloudflare R2 Storage
 
@@ -187,17 +201,6 @@ stdout_logfile=/var/log/binance_scraper.out.log
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 📞 Contact
-
-Project Link: [https://github.com/mpanac/binance-futures-orderbook-scraper](https://github.com/mpanac/binance-futures-orderbook-scraper)
-
-## 🙏 Acknowledgements
-
-- [Binance](https://www.binance.com/)
-- [WebSocket-client](https://developers.binance.com/docs/derivatives/Introduction)
-- [pandas](https://pandas.pydata.org/)
-- [pyarrow](https://arrow.apache.org/docs/python/)
-- [Cloudflare R2](https://www.cloudflare.com/products/r2/)
 
 ## ☕ Support the Project
 
